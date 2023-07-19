@@ -1,0 +1,26 @@
+OWASP 2021
+
+Flaw 1: Security Misconfiguration
+The admin account's username and password for this application are both "admin". While this is not the default admin credentials when creating a superuser account with Django's "createsuperuser" tool, it is a common default for admin credentials. This means it would be easy for an attacker to guess the credentials and gain access to the admin account. With the credentials, the attacker can navigate to "<url of the application>/admin" and log in to gain access to the admin page. Here they can see potentially damaging information, such as user details, and otherwise modify the application. 
+
+This flaw can be easily fixed by creating a new admin account with a more secure password.
+
+
+
+Flaw 2: Identification and Authentication Failures
+The application does not log the user out after they close the browser window. This means that if the users doesn't log out manually, an attacker with access to the same computer can use their account. Additionally, the expiration time for the session is not set, which means the user will never be logged out automatically. While this can be avoided by clicking the "Log out" button on the index page after the user is done with the application, this is not very secure and it would be best if the application logged out the user automatically. 
+
+This can be fixed by uncommenting the SESSION_EXPIRE_AT_BROWSER_CLOSE and SESSION_COOKIE_AGE in settings.py.
+
+
+Flaw 3: Security Logging and Monitoring Failures
+The application does not create log files or output any logs to the console. This means that it is harder to identify potential issues with the application. The logging behavior is defined in the "settings.py" file of the project. 
+
+This can be fixed by removing the LOGGING variable from the settings.py file and uncommenting the multiline code block above it. This makes it so logging messages of any severity will be displayed in the console. This is not the ideal solution, but it will display any critical information about the application.
+
+Flaw 4: CSRF
+
+A cross-site request forgery attack means that a malicious website can direct the user to another application where the user is logged in. For example, if the user logs in to this application, then goes to a malicious website, that website can make potentially harmful requests to this application because the user has already logged in.
+
+
+
