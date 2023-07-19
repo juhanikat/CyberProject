@@ -1,4 +1,6 @@
 OWASP 2021
+LINK: https://github.com/juhanikat/CyberProject
+
 
 Flaw 1: Security Misconfiguration
 The admin account's username and password for this application are both "admin". While this is not the default admin credentials when creating a superuser account with Django's "createsuperuser" tool, it is a common default for admin credentials. This means it would be easy for an attacker to guess the credentials and gain access to the admin account. With the credentials, the attacker can navigate to "<url of the application>/admin" and log in to gain access to the admin page. Here they can see potentially damaging information, such as user details, and otherwise modify the application. 
@@ -20,9 +22,13 @@ This can be fixed by removing the LOGGING variable from the settings.py file and
 
 Line number of the fix: https://github.com/juhanikat/CyberProject/blob/302bc6ebe58177c37fcef803e8933e26c85f17e3/cyberproject/settings.py#L73
 
-Flaw 4: CSRF
 
+Flaw 4: CSRF
 A cross-site request forgery attack means that a malicious website can direct the user to another application where the user is logged in. For example, if the user logs in to this application, then goes to a malicious website, that website can make potentially harmful requests to this application because the user has already logged in.
+
+In the "views.py" file, the vote view has a "csrf_exempt" decorator. This means that this view is exempt from django's build-in csrf protection. Because of this, a malicious website could make a logged-in user vote on a poll without their knowledge.
+
+This can be fixed by removing the "csrf_exempt" decorator at https://github.com/juhanikat/CyberProject/blob/8292271d54c508495d0ee0b978c318a71af43479/polls/views.py#L44
 
 
 
