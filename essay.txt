@@ -18,6 +18,8 @@ The application does not create log files or output any logs to the console. Thi
 
 This can be fixed by removing the LOGGING variable from the settings.py file and uncommenting the multiline code block above it. This makes it so logging messages of any severity will be displayed in the console. This is not the ideal solution, but it will display any critical information about the application.
 
+Line number of the fix: https://github.com/juhanikat/CyberProject/blob/302bc6ebe58177c37fcef803e8933e26c85f17e3/cyberproject/settings.py#L73
+
 Flaw 4: CSRF
 
 A cross-site request forgery attack means that a malicious website can direct the user to another application where the user is logged in. For example, if the user logs in to this application, then goes to a malicious website, that website can make potentially harmful requests to this application because the user has already logged in.

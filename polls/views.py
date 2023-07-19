@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Choice, Question
 
@@ -40,7 +41,7 @@ def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, "polls/results.html", {"question": question})
 
-
+@csrf_exempt
 @login_required(login_url="/polls/login")
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
