@@ -5,30 +5,42 @@ LINK: https://github.com/juhanikat/CyberProject
 Flaw 1: Security Misconfiguration
 The admin account's username and password for this application are both "admin". While this is not the default admin credentials when creating a superuser account with Django's "createsuperuser" tool, it is a common default for admin credentials. This means it would be easy for an attacker to guess the credentials and gain access to the admin account. With the credentials, the attacker can navigate to "<url of the application>/admin" and log in to gain access to the admin page. Here they can see potentially damaging information, such as user details, and otherwise modify the application. 
 
-This flaw can be easily fixed by creating a new admin account with a more secure password.
+This flaw can be easily fixed by changing the admin account password to a more secure one. This can be done by running the command "python manage.py changepassword admin". 
 
 
+Flaw 2: Security Misconfiguration
+The page that is shown to the user when they, for example, navigate to an url that doesn't exist contains information that is not meant to be shown to the end user. for example, going to <url of the application/poll>, which doesn't exist, displays to the user what URL patterns Django tried to use to reach the page. This is something that the end user does not need to see.
 
-Flaw 2: Identification and Authentication Failures
+This flaw can be fixed by removing the following line from settings.py: https://github.com/juhanikat/CyberProject/blob/e670fc5b940fa8b02b0389407171a0e104faba1a/cyberproject/settings.py#L26C1-L26C13 and uncommenting the line below it.
+
+
+Flaw 3: Identification and Authentication Failures
 The application does not log the user out after they close the browser window. This means that if the users doesn't log out manually, an attacker with access to the same computer can use their account. Additionally, the expiration time for the session is not set, which means the user will never be logged out automatically. While this can be avoided by clicking the "Log out" button on the index page after the user is done with the application, this is not very secure and it would be best if the application logged out the user automatically. 
 
-This can be fixed by uncommenting the SESSION_EXPIRE_AT_BROWSER_CLOSE and SESSION_COOKIE_AGE in settings.py.
+This can be fixed by uncommenting the SESSION_EXPIRE_AT_BROWSER_CLOSE and SESSION_COOKIE_AGE in settings.py:
+https://github.com/juhanikat/CyberProject/blob/e670fc5b940fa8b02b0389407171a0e104faba1a/cyberproject/settings.py#L95
 
 
-Flaw 3: Security Logging and Monitoring Failures
+Flaw 4: Security Logging and Monitoring Failures
 The application does not create log files or output any logs to the console. This means that it is harder to identify potential issues with the application. The logging behavior is defined in the "settings.py" file of the project. 
 
-This can be fixed by removing the LOGGING variable from the settings.py file and uncommenting the multiline code block above it. This makes it so logging messages of any severity will be displayed in the console. This is not the ideal solution, but it will display any critical information about the application.
+This can be fixed by removing the LOGGING variable from the settings.py file and uncommenting the multiline code block above it. This makes it so logging messages of any severity will be displayed in the console. This is not the ideal solution, and it will fill the console with log messages whenever a user visits an url, but it will also display any critical information about the application.
 
 Line number of the fix: https://github.com/juhanikat/CyberProject/blob/302bc6ebe58177c37fcef803e8933e26c85f17e3/cyberproject/settings.py#L73
 
 
-Flaw 4: CSRF
+Flaw 5: Cross-Site Request Forgery
 A cross-site request forgery attack means that a malicious website can direct the user to another application where the user is logged in. For example, if the user logs in to this application, then goes to a malicious website, that website can make potentially harmful requests to this application because the user has already logged in.
 
-In the "views.py" file, the vote view has a "csrf_exempt" decorator. This means that this view is exempt from django's build-in csrf protection. Because of this, a malicious website could make a logged-in user vote on a poll without their knowledge.
+Django has built-in cross-site request forgery protection for such attacks. However, in the "views.py" file, the vote view has a "csrf_exempt" decorator. This means that this view is exempt from django's build-in csrf protection. Because of this, a malicious website could make a logged-in user vote on a poll without their knowledge.
 
 This can be fixed by removing the "csrf_exempt" decorator at https://github.com/juhanikat/CyberProject/blob/8292271d54c508495d0ee0b978c318a71af43479/polls/views.py#L44
+
+
+Flaw 6: Vulnerable and Outdated Components
+The Django version the application uses (version 4.1) is out of date. This is potentially dangerous because outdated versions might contain security flaws. 
+
+This can be fixed by upgrading Django to the latest version using this guide: https://docs.djangoproject.com/en/4.2/howto/upgrade-version/
 
 
 
