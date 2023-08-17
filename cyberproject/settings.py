@@ -27,7 +27,7 @@ DEBUG = True
 #DEBUG = False
 
 ALLOWED_HOSTS = []
-
+#ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
 
@@ -71,6 +71,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "cyberproject.wsgi.application"
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+}
 #The fix
 """
 LOGGING = {
@@ -87,10 +92,6 @@ LOGGING = {
     },
 }
 """
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": True,
-}
 
 
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
